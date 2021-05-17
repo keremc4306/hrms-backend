@@ -21,5 +21,5 @@ public class JobPosition {
 	@Column(name="title")
 	private String position;
 	
-	//aosdsadkasdh
+	
 }
