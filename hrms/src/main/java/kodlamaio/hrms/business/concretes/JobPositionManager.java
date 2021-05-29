@@ -25,4 +25,9 @@ public class JobPositionManager implements JobPositionService {
 		return this.jobPositionDao.findAll();
 	}
 
+	@Override
+	public void add(JobPosition jobPosition) {
+		this.jobPositionDao.save(jobPosition);
+	}
+
 }

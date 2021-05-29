@@ -8,11 +8,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name="job_positions")
 public class JobPosition {
+	
+	public JobPosition(String position) {
+		super();
+		this.position = position;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
