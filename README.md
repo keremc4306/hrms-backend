@@ -1,5 +1,6 @@
 # hrms-backend
 
-**Database Diagram**
+**Database Diagram (Updated)**
 
-![ERD](https://user-images.githubusercontent.com/79416722/118618464-51e36300-b7cc-11eb-9883-7a4440fa41c8.png)
+![ERD](https://user-images.githubusercontent.com/79416722/122785684-3e8c5180-d2bc-11eb-9c4e-ca278813ad0c.png)
+
