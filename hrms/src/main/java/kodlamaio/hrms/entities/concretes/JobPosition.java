@@ -1,6 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ public class JobPosition {
 	private String position;
 	
 	@Column(name= "created_at", columnDefinition = "Date default CURRENT_DATE")
-	private LocalDate createdDate;
+	private LocalDateTime createdDate = LocalDateTime.now();
 
 	@Column(name= "is_active", columnDefinition = "boolean default true")
 	private boolean isActive = true;

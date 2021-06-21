@@ -7,9 +7,11 @@ import kodlamaio.hrms.business.abstracts.AuthService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.business.abstracts.UserService;
+import kodlamaio.hrms.core.utilities.adapters.ValidationService;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
+import kodlamaio.hrms.core.verification.VerificationService;
 import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
 
@@ -19,13 +21,19 @@ public class AuthManager implements AuthService {
 	private UserService userService;
 	private EmployerService employerService;
 	private JobSeekerService jobSeekerService;
+	private VerificationService verificationService;
+	private ValidationService validationService;
 
 	@Autowired
-	public AuthManager(UserService userService, EmployerService employerService, JobSeekerService jobSeekerService) {
+	public AuthManager(UserService userService, EmployerService employerService, 
+			JobSeekerService jobSeekerService, VerificationService verificationService,
+			ValidationService validationService) {
 		super();
 		this.userService = userService;
 		this.employerService = employerService;
 		this.jobSeekerService = jobSeekerService;
+		this.verificationService = verificationService;
+		this.validationService = validationService;
 	}
 
 	@Override
@@ -50,6 +58,7 @@ public class AuthManager implements AuthService {
 			return new ErrorResult("Passwords do not match.");
 		}
 
+		verificationService.sendLink(employer.getEmail());
 		employerService.add(employer);
 
 		return new SuccessResult("Registration has been successfully completed");
@@ -57,6 +66,11 @@ public class AuthManager implements AuthService {
 
 	@Override
 	public Result registerJobSeeker(JobSeeker jobSeeker) {
+		if (checkIfRealPerson(Long.parseLong(jobSeeker.getNatId()), jobSeeker.getFirstName(),
+				jobSeeker.getLastName(), jobSeeker.getYearOfBirth().getYear()) == false) {
+			return new ErrorResult("TC Id number could not be verified.");
+		}
+		
 		if (!checkIfNullInfoForJobseeker(jobSeeker)) {
 
 			return new ErrorResult("You have entered missing information. Please fill in all fields.");
@@ -72,11 +86,10 @@ public class AuthManager implements AuthService {
 			return new ErrorResult(jobSeeker.getEmail() + " already exists.");
 		}
 
+		verificationService.sendLink(jobSeeker.getEmail());
 		jobSeekerService.add(jobSeeker);
 		return new SuccessResult("Registration has been successfully completed");
 	}
-
-	// Validation for employer register ---START---
 
 	private boolean checkIfNullInfoForEmployer(Employer employer) {
 
@@ -112,9 +125,6 @@ public class AuthManager implements AuthService {
 		return true;
 	}
 
-	// Validation for employer register ---END---
-
-	// Validation for jobseeker register ---START---
 	private boolean checkIfNullInfoForJobseeker(JobSeeker jobSeeker) {
 
 		if (jobSeeker.getFirstName() != null && jobSeeker.getLastName() != null && jobSeeker.getNatId() != null
@@ -136,9 +146,13 @@ public class AuthManager implements AuthService {
 		return false;
 	}
 
-	// Validation for jobseeker register ---END---
+	private boolean checkIfRealPerson(long natId, String firstName, String lastName, int yearOfBirth) {
 
-	// Common Validation
+		if (validationService.validateByMernis(natId, firstName, lastName, yearOfBirth)) {
+			return true;
+		}
+		return false;
+	}
 
 	private boolean checkIfEmailExists(String email) {
 

@@ -1,6 +1,6 @@
 package kodlamaio.hrms.entities.concretes;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,7 @@ public class User {
 	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 	
 	@Column(name = "password")
@@ -37,7 +37,7 @@ public class User {
 	private String confirmPassword;
 	
 	@Column(name = "created_at", columnDefinition = "Date defult CURRENT_DATE")
-	private LocalDate createdDate = LocalDate.now();
+	private LocalDateTime createdDate = LocalDateTime.now();
 	
 	@Column(name= "is_active", columnDefinition = "boolean default true")
 	private boolean isActive = true;

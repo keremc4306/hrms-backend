@@ -27,7 +27,8 @@ public class JobPositionManager implements JobPositionService {
 
 	@Override
 	public DataResult<List<JobPosition>> getAll() {
-		return new SuccessDataResult<List<JobPosition>>(this.jobPositionDao.findAll());
+		return new SuccessDataResult<List<JobPosition>>
+		(this.jobPositionDao.findAll(), "Data listed.");
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class JobPositionManager implements JobPositionService {
 	@Override
 	public DataResult<JobPosition> getJobByTitle(String title) {
 		return new SuccessDataResult<JobPosition>
-		(this.jobPositionDao.findByJobPst(title));
+		(this.jobPositionDao.findByPosition(title));
 	}
 
 }
