@@ -1,5 +1,7 @@
 package kodlamaio.hrms.business.concretes;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +9,7 @@ import kodlamaio.hrms.business.abstracts.AuthService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.business.abstracts.UserService;
+import kodlamaio.hrms.business.abstracts.VerificationCodeService;
 import kodlamaio.hrms.core.utilities.adapters.ValidationService;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
@@ -14,6 +17,7 @@ import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.core.verification.VerificationService;
 import kodlamaio.hrms.entities.concretes.Employer;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
+import kodlamaio.hrms.entities.concretes.VerificationCode;
 
 @Service
 public class AuthManager implements AuthService {
@@ -23,17 +27,19 @@ public class AuthManager implements AuthService {
 	private JobSeekerService jobSeekerService;
 	private VerificationService verificationService;
 	private ValidationService validationService;
+	private VerificationCodeService verificationCodeService;
 
 	@Autowired
 	public AuthManager(UserService userService, EmployerService employerService, 
 			JobSeekerService jobSeekerService, VerificationService verificationService,
-			ValidationService validationService) {
+			ValidationService validationService, VerificationCodeService verificationCodeService) {
 		super();
 		this.userService = userService;
 		this.employerService = employerService;
 		this.jobSeekerService = jobSeekerService;
 		this.verificationService = verificationService;
 		this.validationService = validationService;
+		this.verificationCodeService = verificationCodeService;
 	}
 
 	@Override
@@ -59,7 +65,8 @@ public class AuthManager implements AuthService {
 		}
 
 		employerService.add(employer);
-		verificationService.sendCode(employer.getEmail(), employer.getId());
+		String code = verificationService.sendCode(employer.getEmail());
+		verificationCodeRecord(code, employer.getId());
 		
 		return new SuccessResult("Registration has been successfully completed");
 	}
@@ -87,7 +94,8 @@ public class AuthManager implements AuthService {
 		}
 
 		jobSeekerService.add(jobSeeker);
-		verificationService.sendCode(jobSeeker.getEmail(), jobSeeker.getId());
+		String code = verificationService.sendCode(jobSeeker.getEmail());
+		verificationCodeRecord(code, jobSeeker.getId());
 		return new SuccessResult("Registration has been successfully completed");
 	}
 
@@ -163,5 +171,10 @@ public class AuthManager implements AuthService {
 		}
 
 		return true;
+	}
+	
+	private void verificationCodeRecord(String code, int id) {
+		VerificationCode verfCode = new VerificationCode(id, code, false, LocalDate.now());
+		this.verificationCodeService.add(verfCode);
 	}
 }
