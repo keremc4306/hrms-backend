@@ -23,14 +23,14 @@ public class AuthController {
 	}
 	
 	@PostMapping("/registerEmployer")
-	public Result registerEmpolyer(@RequestBody Employer employer)
+	public Result registerEmpolyer(@RequestBody Employer employer, String confirmPassword)
 	{
-		return authService.registerEmployer(employer);
+		return authService.registerEmployer(employer, confirmPassword);
 	}
 	
 	@PostMapping("/registerJobseeker")
-	public Result registerJobseeker(@RequestBody JobSeeker jobSeeker)
+	public Result registerJobseeker(@RequestBody JobSeeker jobSeeker, String confirmPassword)
 	{
-		return authService.registerJobSeeker(jobSeeker);
+		return authService.registerJobSeeker(jobSeeker, confirmPassword);
 	}
 }

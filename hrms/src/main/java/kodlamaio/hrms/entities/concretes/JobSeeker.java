@@ -30,8 +30,8 @@ public class JobSeeker extends User {
 	@Column(name= "nat_id")
 	private String natId;
 	
-	@Column(name = "year_of_birth")
-	private LocalDate yearOfBirth;
+	@Column(name = "date_of_birth")
+	private LocalDate dateOfBirth;
 	
 	@Column(name = "is_verified", columnDefinition = "boolean default false")
 	private boolean isVerified = false;
