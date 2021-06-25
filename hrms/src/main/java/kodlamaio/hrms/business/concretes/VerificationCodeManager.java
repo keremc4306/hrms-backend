@@ -30,6 +30,7 @@ public class VerificationCodeManager implements VerificationCodeService{
 		return new SuccessResult("Code has been saved");
 	}
 
+	/*
 	@Override
 	public Result delete(VerificationCode code) {
 		this.verificationCodeDao.delete(code);
@@ -51,4 +52,5 @@ public class VerificationCodeManager implements VerificationCodeService{
 	public DataResult<List<VerificationCode>> getAll() {
 		return new SuccessDataResult<List<VerificationCode>>(this.verificationCodeDao.findAll());
 	}
+	*/
 }

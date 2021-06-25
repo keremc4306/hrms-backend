@@ -65,8 +65,8 @@ public class AuthManager implements AuthService {
 		}
 
 		employerService.add(employer);
-		String code = verificationService.sendCode(employer.getEmail());
-		verificationCodeRecord(code, employer.getId());
+		String code = verificationService.sendCode();
+		verificationCodeRecord(code, employer.getId(), employer.getEmail());
 		
 		return new SuccessResult("Registration has been successfully completed");
 	}
@@ -94,8 +94,8 @@ public class AuthManager implements AuthService {
 		}
 
 		jobSeekerService.add(jobSeeker);
-		String code = verificationService.sendCode(jobSeeker.getEmail());
-		verificationCodeRecord(code, jobSeeker.getId());
+		String code = verificationService.sendCode();
+		verificationCodeRecord(code, jobSeeker.getId(), jobSeeker.getEmail());
 		return new SuccessResult("Registration has been successfully completed");
 	}
 
@@ -173,8 +173,9 @@ public class AuthManager implements AuthService {
 		return true;
 	}
 	
-	private void verificationCodeRecord(String code, int id) {
+	private void verificationCodeRecord(String code, int id, String email) {
 		VerificationCode verfCode = new VerificationCode(id, code, false, LocalDate.now());
 		this.verificationCodeService.add(verfCode);
+		System.out.println("Verification code has been sent to " + email);
 	}
 }
